@@ -1,7 +1,3 @@
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
 data "aws_ami" "ecs" {
   most_recent = true
 
