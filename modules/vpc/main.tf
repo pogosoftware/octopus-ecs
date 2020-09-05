@@ -1,36 +1,48 @@
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr_block
 
-  tags = {
-    Name = "Octopus"
-  }
+  tags = merge(
+    var.tags, 
+    {
+      Name = var.vpc_name
+    }
+  )
 }
 
 resource "aws_subnet" "public" {
   count             = 3
   vpc_id            = aws_vpc.this.id
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  cidr_block        = cidrsubnet("10.240.0.0/24", 3, count.index)
+  cidr_block        = cidrsubnet(var.vpc_cidr_block, 3, count.index)
 
-  tags = {
-    Name = join("-", ["public", split("-", data.aws_availability_zones.available.names[count.index])[2]])
-  }
+  tags = merge(
+    var.tags,
+    {
+      Name = "public-${split("-", data.aws_availability_zones.available.names[count.index])[2]}"
+    }
+  )
 }
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 
-  tags = {
-    Name = "Octopus"
-  }
+  tags = merge(
+    var.tags, 
+    {
+      Name = var.vpc_name
+    }
+  )
 }
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
 
-  tags = {
-    Name = "Octopus"
-  }
+  tags = merge(
+    var.tags, 
+    {
+      Name = var.vpc_name
+    }
+  )
 }
 
 resource "aws_main_route_table_association" "this" {
@@ -48,8 +60,8 @@ resource "aws_route" "public_internet_gateway" {
   }
 }
 
-resource "aws_security_group" "this" {
-  name        = "allow_ssh_http"
+resource "aws_security_group" "ecs" {
+  name        = "ecs-ec2-sg"
   description = "Allow SSH and HHTP"
   vpc_id      = aws_vpc.this.id
 
@@ -76,14 +88,17 @@ resource "aws_security_group" "this" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name = "Octopus"
-  }
+  tags = merge(
+    var.tags, 
+    {
+      Name = var.vpc_name
+    }
+  )
 }
 
 resource "aws_security_group" "rds" {
-  name        = "allows_rds"
-  description = "Allow RDS"
+  name        = "rds-sg"
+  description = "Allow connect to RDS"
   vpc_id      = aws_vpc.this.id
 
   ingress {
@@ -91,10 +106,13 @@ resource "aws_security_group" "rds" {
     from_port       = 1433
     to_port         = 1433
     protocol        = "tcp"
-    security_groups = [aws_security_group.this.id]
+    security_groups = [aws_security_group.ecs.id]
   }
 
-  tags = {
-    Name = "Octopus"
-  }
+  tags = merge(
+    var.tags, 
+    {
+      Name = var.vpc_name
+    }
+  )
 }

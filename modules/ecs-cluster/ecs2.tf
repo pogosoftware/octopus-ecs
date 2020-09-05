@@ -26,7 +26,7 @@ resource "aws_launch_configuration" "this" {
   key_name                    = aws_key_pair.this.key_name
   associate_public_ip_address = var.lc_associate_public_ip_address
   enable_monitoring           = var.lc_enable_monitoring
-  security_groups             = [aws_security_group.this.id]
+  security_groups             = var.lc_security_groups
 
   user_data = templatefile("${path.module}/templates/container-instance.tmpl", {
     ecs_cluster_name = var.ecs_cluster_name
@@ -50,5 +50,5 @@ resource "aws_autoscaling_group" "this" {
   min_size         = var.asg_min_size
   desired_capacity = var.asg_desired_capacity
 
-  vpc_zone_identifier = aws_subnet.public.*.id
+  vpc_zone_identifier = var.asg_subnet_ids
 }

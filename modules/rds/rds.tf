@@ -18,14 +18,24 @@ resource "aws_db_instance" "octopus" {
   skip_final_snapshot  = true
 
   db_subnet_group_name   = aws_db_subnet_group.this.name
-  vpc_security_group_ids = [aws_security_group.rds.id]
+  vpc_security_group_ids = var.vpc_security_group_ids
+
+  tags = merge(
+    var.tags, 
+    {
+      Name = var.db_identifier
+    }
+  )
 }
 
 resource "aws_db_subnet_group" "this" {
-  name       = "octopus"
-  subnet_ids = aws_subnet.public.*.id
+  name       = var.db_identifier
+  subnet_ids = var.vpc_subnet_ids
 
-  tags = {
-    Name = "Octopus"
-  }
+  tags = merge(
+    var.tags, 
+    {
+      Name = var.db_identifier
+    }
+  )
 }
