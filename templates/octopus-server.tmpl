@@ -1,0 +1,53 @@
+[
+  {
+    "name": "${name}",
+    "image": "${image}",
+    "cpu": ${cpu},
+    "memory": ${memory},
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": ${host_port}
+      }
+    ],
+    "environment": [
+      {
+        "name": "ACCEPT_EULA",
+        "value": "Y"
+      },
+      {
+        "name": "OCTOPUS_SERVER_NODE_NAME",
+        "value": "${name}"
+      },
+      {
+        "name": "DB_CONNECTION_STRING",
+        "value": "Server=${db_server},${db_port};Database=${db_database};User=${db_username};Password=${db_password}"
+      },
+      {
+        "name": "ADMIN_USERNAME",
+        "value": "${admin_username}"
+      },
+      {
+        "name": "ADMIN_PASSWORD",
+        "value": "${admin_password}"
+      },
+      {
+        "name": "ADMIN_EMAIL",
+        "value": "${admin_email}"
+      },
+      {
+        "name": "OCTOPUS_SERVER_BASE64_LICENSE",
+        "value": "${license}"
+      },
+      {
+        "name": "MASTER_KEY",
+        "value": "${master_key}"
+      },
+      {
+        "name": "ADMIN_API_KEY",
+        "value": "${admin_api_key}"
+      }
+    ]
+  }
+]
