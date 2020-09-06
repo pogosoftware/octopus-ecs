@@ -10,7 +10,7 @@ resource "aws_db_instance" "octopus" {
   allocated_storage = var.db_allocated_storage
 
   username = var.db_username
-  password = var.db_password
+  password = random_password.octopus.result
 
   publicly_accessible = var.publicly_accessible
 
