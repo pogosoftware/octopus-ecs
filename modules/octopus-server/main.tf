@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "service" {
     db_username    = var.db_username,
     db_password    = var.db_password,
     admin_username = var.octopus_admin_username,
-    admin_password = var.octopus_admin_password,
+    admin_password = random_password.octopus_admin.result,
     admin_email    = var.octopus_admin_email,
     admin_api_key  = var.octopus_admin_api_key,
     license        = var.octopus_license,

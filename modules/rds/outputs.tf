@@ -15,6 +15,6 @@ output rds_octopus_username {
 }
 
 output rds_octopus_password {
-  value     = var.db_password
+  value     = random_password.octopus.result
   sensitive = true
 }

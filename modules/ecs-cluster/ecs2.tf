@@ -50,5 +50,9 @@ resource "aws_autoscaling_group" "this" {
   min_size         = var.asg_min_size
   desired_capacity = var.asg_desired_capacity
 
-  vpc_zone_identifier = var.asg_subnet_ids
+  vpc_zone_identifier = var.vpc_subnet_ids
+
+  lifecycle {
+    ignore_changes = [load_balancers, target_group_arns]
+  }
 }
