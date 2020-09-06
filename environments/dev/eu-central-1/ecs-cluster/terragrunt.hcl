@@ -21,5 +21,7 @@ inputs = {
   asg_min_size = 1
   asg_max_size = 1
   asg_desired_capacity = 1
-  asg_subnet_ids = dependency.vpc.outputs.public_subnet_ids
+  lb_security_groups = [dependency.vpc.outputs.security_group_ecs_lb_id]
+  vpc_id = dependency.vpc.outputs.vpc_id
+  vpc_subnet_ids = dependency.vpc.outputs.public_subnet_ids
 }

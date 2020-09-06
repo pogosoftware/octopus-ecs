@@ -53,6 +53,18 @@ variable asg_desired_capacity {
   type    = number
 }
 
-variable asg_subnet_ids {
+### LB
+
+variable lb_security_groups {
+  type = list(string)
+}
+
+### VPC
+
+variable vpc_id {
+  type = string
+}
+
+variable vpc_subnet_ids {
   type = list(string)
 }
