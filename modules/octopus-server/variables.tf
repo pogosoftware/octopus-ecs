@@ -21,10 +21,6 @@ variable octopus_admin_username {
   type    = string
 }
 
-variable octopus_admin_password {
-  type = string
-}
-
 variable octopus_admin_email {
   type    = string
 }
